@@ -1,0 +1,22 @@
+# TYČIA NESĄUGUS: naudoti tik savo kompiuteryje, lokaliai.
+FROM python:3.11.9-bookworm
+
+WORKDIR /app
+
+# 1: Pavyzdinis (NETIKRAS) raktas įrašytas į image sluoksnius.
+ENV DEMO_API_KEY=FAKE_LAB_KEY_DO_NOT_USE
+
+# 2: Nereikalingi paketai ir neišvalytas apt podėlis.
+RUN apt-get update && apt-get install -y vim curl net-tools
+
+# 3: ADD vietoje tikslesnio COPY; kopijuojama visa projekto direktorija.
+ADD . /app
+
+# 4: Senos priklausomybės; 5: paleidžiama kaip root.
+RUN pip install --no-cache-dir -r requirements.insecure.txt
+
+# 6: Nereikalingai deklaruojamas SSH prievadas (nėra SSH serverio).
+EXPOSE 8000 22
+
+# 7: Python kūrimo serveris vietoje produkcinio WSGI serverio.
+CMD ["python", "app.py"]

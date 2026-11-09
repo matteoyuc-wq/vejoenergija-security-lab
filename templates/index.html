@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="lt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VėjoEnergija | Stebėsenos portalas</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, system-ui, -apple-system, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #0b1321; color: #e9eef6; }
+    .wrap { max-width: 1080px; margin: auto; padding: 26px 24px 70px; }
+    header { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-bottom: 34px; }
+    .brand { font-size: 19px; font-weight: 750; letter-spacing: -.5px; }
+    .brand span { color: #77e0b0; }
+    .tag { font-size: 12px; border: 1px solid #35536a; border-radius: 50px; padding: 9px 13px; color: #a7bfd2; }
+    h1 { font-size: clamp(30px, 5vw, 48px); margin: 0 0 8px; letter-spacing: -1.5px; }
+    .intro { color: #a4b4c6; margin: 0 0 32px; line-height: 1.6; }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card { border-radius: 16px; padding: 25px; background: #142238; border: 1px solid #253b55; }
+    .card small { font-size: 13px; color: #9bb0c6; }
+    .card strong { display: block; font-size: 33px; margin-top: 10px; letter-spacing: -1px; }
+    .card em { color: #8debc2; font-style: normal; font-size: 12px; }
+    h2 { margin-top: 43px; font-size: 22px; }
+    .tablewrap { overflow-x: auto; border-radius: 16px; border: 1px solid #253b55; background: #101d30; }
+    table { width: 100%; border-collapse: collapse; min-width: 590px; }
+    th, td { padding: 19px 22px; text-align: left; border-bottom: 1px solid #23354d; }
+    th { color: #94abc3; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .7px; }
+    tr:last-child td { border-bottom: 0; }
+    .pill { display: inline-block; font-size: 12px; padding: 7px 11px; border-radius: 50px; background: #154c41; color: #9af4c9; }
+    .pill.warn { background: #5c4120; color: #ffd89e; }
+    footer { margin-top: 28px; color: #869bb0; font-size: 12px; line-height: 1.7; }
+    a { color: #84dcb4; }
+    @media (max-width: 650px) { .cards { grid-template-columns: 1fr; } header { align-items: flex-start; flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">Vėjo<span>Energija</span> / Security Lab</div>
+      <div class="tag">Mokomoji aplinka · Mateuš Juchnevič</div>
+    </header>
+    <main>
+      <h1>Jėgainių stebėsena</h1>
+      <p class="intro">Demonstracinis portalas kibernetinio saugumo atsiskaitymui. Rodomi tik išgalvoti duomenys.</p>
+      <section class="cards" aria-label="Bendri rodikliai">
+        <div class="card"><small>Jėgainės</small><strong>{{ total }}</strong><em>Demonstraciniai objektai</em></div>
+        <div class="card"><small>Veikiančios</small><strong>{{ active }} / {{ total }}</strong><em>Stebėsena aktyvi</em></div>
+        <div class="card"><small>Bendra galia</small><strong>{{ power }} MW</strong><em>Simuliuoti duomenys</em></div>
+      </section>
+      <h2>Įrenginių būklė</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Įrenginys</th><th>Parkas</th><th>Būklė</th><th>Galia</th></tr></thead>
+          <tbody>
+            {% for turbine in turbines %}
+            <tr>
+              <td><strong>{{ turbine.id }}</strong></td>
+              <td>{{ turbine.site }}</td>
+              <td><span class="pill{% if turbine.status != 'Veikia' %} warn{% endif %}">{{ turbine.status }}</span></td>
+              <td>{{ turbine.power_mw }} MW</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </main>
+    <footer>
+      Laboratorinis demonstracinis projektas. Jokio ryšio su realiomis vėjo jėgainėmis ar OT valdikliais.<br>
+      API: <a href="/api/turbines">/api/turbines</a> · Būklės tikrinimas: <a href="/health">/health</a>
+    </footer>
+  </div>
+</body>
+</html>
